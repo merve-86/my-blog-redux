@@ -14,32 +14,38 @@ import MenuItem from "@mui/material/MenuItem";
 import logo from "../assets/blog-image.png";
 import useAuthCalls from "../hooks/useAuthCalls";
 import { useSelector } from "react-redux";
-
-const pages = ["DASHBOARD", "NEW BLOG", "ABOUT"];
-//const settings = ["Register", "Logout"];
-
+import { NavLink } from "react-router-dom";
+const pages = [
+  {
+    title: "DASHBOARD",
+    path: "/blog",
+  },
+  {
+    title: "NEW BLOG",
+    path: "/newblog",
+  },
+  {
+    title: "ABOUT",
+    path: "/about",
+  },
+];
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
   const { logout } = useAuthCalls();
   const { user } = useSelector((state) => state.auth);
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
-
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -59,9 +65,8 @@ function Navbar() {
               textDecoration: "none",
             }}
           >
-            <img src={logo} alt="logo " width="50px" />
+            <img src={logo} alt="logo" width="50px" />
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -92,13 +97,17 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                  <NavLink
+                    to={page.path}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <Typography textAlign="center">{page.title}</Typography>
+                  </NavLink>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          {/* <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
@@ -115,20 +124,20 @@ function Navbar() {
               textDecoration: "none",
             }}
           >
-            <img src={logo} alt="logo " width="50px" />
+            <img src={logo} alt="logo" width="50px" />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.title}
+                component={NavLink}
+                to={page.path}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                {page.title}
               </Button>
             ))}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -166,45 +175,3 @@ function Navbar() {
   );
 }
 export default Navbar;
-
-// import * as React from "react";
-// import AppBar from "@mui/material/AppBar";
-// import Box from "@mui/material/Box";
-// import Toolbar from "@mui/material/Toolbar";
-// import Typography from "@mui/material/Typography";
-// import Button from "@mui/material/Button";
-// import { useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import useAuthCalls from "../hooks/useAuthCalls";
-
-// export default function Navbar() {
-//   const navigate = useNavigate();
-
-//   const { user } = useSelector((state) => state.auth);
-//   const { logout } = useAuthCalls();
-
-//   return (
-//     <Box sx={{ flexGrow: 1 }}>
-//       <AppBar position="static" color="secondary">
-//         <Toolbar>
-//           <Typography
-//             variant="h6"
-//             component="div"
-//             sx={{ flexGrow: 1, cursor: "pointer" }}
-//             onClick={() => navigate("/")}
-//           >
-//             Clarusway News
-//           </Typography>
-
-//           {user ? (
-//             <Button color="inherit" onClick={logout}>
-//               Logout
-//             </Button>
-//           ) : (
-//             <Button color="inherit">Login</Button>
-//           )}
-//         </Toolbar>
-//       </AppBar>
-//     </Box>
-//   );
-// }

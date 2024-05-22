@@ -2,6 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   blogs: [],
+  categories: [],
+  status: [],
+  comments:[],
   loading: false,
   error: false,
 };

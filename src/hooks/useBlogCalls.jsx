@@ -2,32 +2,12 @@ import { useDispatch } from "react-redux";
 import useAxios from "./useAxios";
 import { fetchFail, fetchStart, getBlogSuccess } from "../features/blogSlice";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
+import { useState } from "react";
 
 const useBlogCalls = () => {
   const { axiosToken } = useAxios();
   const dispatch = useDispatch();
-
-  // const getFirms = async () => {
-  //   dispatch(fetchStart())
-  //   try {
-  //     const { data } = await axiosToken("/firms")
-  //     dispatch(getFirmsSuccess(data.data))
-  //   } catch (error) {
-  //     dispatch(fetchFail())
-  //     console.log(error)
-  //   }
-  // }
-
-  // const getSales = async () => {
-  //   dispatch(fetchStart())
-  //   try {
-  //     const { data } = await axiosToken("/sales")
-  //     dispatch(getSalesSuccess(data.data))
-  //   } catch (error) {
-  //     dispatch(fetchFail())
-  //     console.log(error)
-  //   }
-  // }
+  // const [commentsCount, setCommentsCount] = useState(0);
 
   const getBlog = async (path = "blogs") => {
     dispatch(fetchStart());
@@ -81,7 +61,19 @@ const useBlogCalls = () => {
     }
   };
 
-  return { getBlog, deleteBlog, postBlog, putBlog };
+  const getCommentsCount = async (blogId) => {
+    try {
+      const response = await axiosToken.get(
+        `/api/comments/count?blogId=${blogId}`
+      );
+      return response.data.count;
+    } catch (error) {
+      console.log(error);
+      return 0;
+    }
+  };
+
+  return { getBlog, deleteBlog, postBlog, putBlog, getCommentsCount };
 };
 
 export default useBlogCalls;

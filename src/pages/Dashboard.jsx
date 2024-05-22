@@ -12,6 +12,7 @@ import TableSkeleton, {
   NoDataMessage,
 } from "../components/DataFetchMessages";
 import useBlogCalls from "../hooks/useBlogCalls";
+import NewBlog from "./NewBlog";
 
 const Dashboard = () => {
   // const { axiosToken } = useAxios()
@@ -70,8 +71,11 @@ const Dashboard = () => {
         info={info}
         setInfo={setInfo}
       /> */}
+      
     </div>
   );
+
 };
+
 
 export default Dashboard;
