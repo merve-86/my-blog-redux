@@ -9,15 +9,11 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useAxios from "./useAxios";
-
-
-
 const useAuthCalls = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { axiosToken, axiosPublic } = useAxios();
   const { token } = useSelector((state) => state.auth);
-  
   const login = async (userData) => {
     dispatch(fetchStart());
     try {
@@ -31,7 +27,6 @@ const useAuthCalls = () => {
       console.log(error);
     }
   };
-
   const register = async (userInfo) => {
     dispatch(fetchStart());
     try {
@@ -51,8 +46,6 @@ const useAuthCalls = () => {
       dispatch(fetchFail());
     }
   };
-
   return { login, register, logout };
 };
-
 export default useAuthCalls;

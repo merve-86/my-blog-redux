@@ -11,10 +11,9 @@ import useAuthCalls from "../hooks/useAuthCalls";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import useBlogCalls from "../hooks/useBlogCalls";
-
+import { Typography } from "@mui/material";
 export default function NewBlog() {
-  const { categories, status } = useSelector((state) => state.blog);
-
+  const { categories } = useSelector((state) => state.blog);
   const initialState = {
     title: "",
     image: "",
@@ -22,21 +21,18 @@ export default function NewBlog() {
     isPublished: false,
     content: "",
   };
-
   const [info, setInfo] = useState(initialState);
   const { postBlog, getBlog } = useBlogCalls();
-
   useEffect(() => {
     getBlog("categories");
   }, []);
-
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     postBlog("blogs", info);
-    //handleClose();
+    setInfo(initialState);
   };
   return (
     <div>
@@ -46,6 +42,9 @@ export default function NewBlog() {
           component={"form"}
           onSubmit={handleSubmit}
         >
+          <Typography variant="h5" color="primary.main">
+            New Blog
+          </Typography>
           <TextField
             label="title"
             name="title"
@@ -95,9 +94,9 @@ export default function NewBlog() {
               onChange={handleChange}
               required
             >
-             <MenuItem>Please Choose...</MenuItem>
-             <MenuItem value={true}>Published</MenuItem>
-             <MenuItem value={false}>Draft</MenuItem>
+              <MenuItem>Please Choose...</MenuItem>
+              <MenuItem value={true}>Published</MenuItem>
+              <MenuItem value={false}>Draft</MenuItem>
             </Select>
           </FormControl>
           <TextField

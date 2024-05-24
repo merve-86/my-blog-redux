@@ -8,49 +8,31 @@ import {
   getCommentsSuccess,
 } from "../features/blogSlice";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
-import { useState } from "react";
-
 const useBlogCalls = () => {
   const { axiosToken } = useAxios();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-
-  const getBlog = async (path = "blog") => {
+  const getBlog = async (path = "blogs") => {
     dispatch(fetchStart());
     try {
-      const { data } = await axiosToken(`/${path}`);
-      const stockData = data.data;
-      dispatch(getBlogSuccess({ stockData, path }));
+      const { data } = await axiosToken.get(`/${path}`);
+      dispatch(getBlogSuccess({ stockData: data.data, path }));
     } catch (error) {
       toastErrorNotify(`${path} verileri çekilememiştir.`);
       dispatch(fetchFail());
       console.log(error);
     }
   };
-
-  const getUserBlogs = async () => {
-    dispatch(fetchStart());
-    try {
-      const { data } = await axiosToken.get(`/blogs?author=${user.id}`); 
-      dispatch(getBlogSuccess({ path: "blogs", stockData: data.data }));
-    } catch (error) {
-      toastErrorNotify(`Kullanıcı blogları çekilememiştir.`);
-      dispatch(fetchFail());
-      console.error(error);
-    }
-  };
-
   const getBlogComments = async (blogId) => {
     dispatch(fetchStart());
     try {
-      const { data } = await axiosToken(`/comments?blogId=${blogId}`);
+      const { data } = await axiosToken.get(`/comments?blogId=${blogId}`);
       dispatch(getCommentsSuccess({ blogId, comments: data.comments }));
     } catch (error) {
       dispatch(fetchFail());
       console.log(error);
     }
   };
-
   const addComment = async (blogId, text) => {
     try {
       const { data } = await axiosToken.post(`/comments`, { blogId, text });
@@ -62,7 +44,6 @@ const useBlogCalls = () => {
       console.log(error);
     }
   };
-
   const deleteBlog = async (path = "blogs", id) => {
     dispatch(fetchStart());
     try {
@@ -75,7 +56,6 @@ const useBlogCalls = () => {
       console.log(error);
     }
   };
-
   const postBlog = async (path = "blogs", info) => {
     dispatch(fetchStart());
     try {
@@ -88,7 +68,6 @@ const useBlogCalls = () => {
       console.log(error);
     }
   };
-
   const putBlog = async (path = "blogs", info) => {
     dispatch(fetchStart());
     try {
@@ -101,7 +80,17 @@ const useBlogCalls = () => {
       console.log(error);
     }
   };
-
+  const getUserBlogs = async () => {
+    dispatch(fetchStart());
+    try {
+      const { data } = await axiosToken.get(`/blogs?author=${user._id}`);
+      dispatch(getBlogSuccess({ stockData: data.data, path: "blogs" }));
+    } catch (error) {
+      toastErrorNotify(`Kullanıcı blogları çekilememiştir.`);
+      dispatch(fetchFail());
+      console.error(error);
+    }
+  };
   return {
     getBlog,
     deleteBlog,
@@ -112,5 +101,4 @@ const useBlogCalls = () => {
     getUserBlogs,
   };
 };
-
 export default useBlogCalls;

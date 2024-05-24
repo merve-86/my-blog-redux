@@ -1,12 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
-  user: null,
+  user: null, // user objesi tam haliyle saklanacak
   token: "",
   loading: false,
   error: false,
 };
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -16,18 +14,17 @@ const authSlice = createSlice({
     },
     loginSuccess: (state, { payload }) => {
       state.loading = false;
-      state.user = payload.user;
+      state.user = payload.user; // user objesi tam haliyle saklandı
       state.token = payload.token;
     },
-    
     registerSuccess: (state, { payload }) => {
       state.loading = false;
-      state.user = payload.user;
+      state.user = payload.user; // user objesi tam haliyle saklandı
       state.token = payload.token;
     },
     logoutSuccess: (state) => {
       state.loading = false;
-      state.user = null;
+      state.user = null; // user objesi null olarak ayarlandı
       state.token = "";
     },
     fetchFail: (state) => {
@@ -36,7 +33,6 @@ const authSlice = createSlice({
     },
   },
 });
-
 export const {
   fetchStart,
   loginSuccess,
