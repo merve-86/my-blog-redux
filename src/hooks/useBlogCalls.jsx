@@ -1,24 +1,77 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useAxios from "./useAxios";
-import { fetchFail, fetchStart, getBlogSuccess } from "../features/blogSlice";
+import {
+  addCommentSuccess,
+  fetchFail,
+  fetchStart,
+  getBlogSuccess,
+  getCommentsSuccess,
+} from "../features/blogSlice";
 import { toastErrorNotify, toastSuccessNotify } from "../helper/ToastNotify";
 import { useState } from "react";
 
 const useBlogCalls = () => {
   const { axiosToken } = useAxios();
   const dispatch = useDispatch();
-  // const [commentsCount, setCommentsCount] = useState(0);
+  const { user } = useSelector((state) => state.auth);
 
-  const getBlog = async (path = "blogs") => {
+  const getBlog = async (path = "blog") => {
     dispatch(fetchStart());
     try {
       const { data } = await axiosToken(`/${path}`);
       const stockData = data.data;
       dispatch(getBlogSuccess({ stockData, path }));
     } catch (error) {
+      toastErrorNotify(`${path} verileri çekilememiştir.`);
       dispatch(fetchFail());
-      toastErrorNotify(`${path} verileri çekilememiştir`);
+      console.log(error);
+    }
+  };
 
+  const getUserBlogs = async () => {
+    dispatch(fetchStart());
+    try {
+      const { data } = await axiosToken.get(`/blogs?author=${user.id}`); 
+      dispatch(getBlogSuccess({ path: "blogs", stockData: data.data }));
+    } catch (error) {
+      toastErrorNotify(`Kullanıcı blogları çekilememiştir.`);
+      dispatch(fetchFail());
+      console.error(error);
+    }
+  };
+
+  const getBlogComments = async (blogId) => {
+    dispatch(fetchStart());
+    try {
+      const { data } = await axiosToken(`/comments?blogId=${blogId}`);
+      dispatch(getCommentsSuccess({ blogId, comments: data.comments }));
+    } catch (error) {
+      dispatch(fetchFail());
+      console.log(error);
+    }
+  };
+
+  const addComment = async (blogId, text) => {
+    try {
+      const { data } = await axiosToken.post(`/comments`, { blogId, text });
+      dispatch(addCommentSuccess({ blogId, comment: data.comment }));
+      toastSuccessNotify("Comment added successfully.");
+    } catch (error) {
+      dispatch(fetchFail());
+      toastErrorNotify("Failed to add comment.");
+      console.log(error);
+    }
+  };
+
+  const deleteBlog = async (path = "blogs", id) => {
+    dispatch(fetchStart());
+    try {
+      await axiosToken.delete(`/${path}/${id}`);
+      toastSuccessNotify(`${path} basariliyla silinmiştir.`);
+      getBlog(path);
+    } catch (error) {
+      toastErrorNotify(`${path} silinememiştir.`);
+      dispatch(fetchFail());
       console.log(error);
     }
   };
@@ -28,23 +81,10 @@ const useBlogCalls = () => {
     try {
       await axiosToken.post(`/${path}/`, info);
       getBlog(path);
-      toastSuccessNotify(`${path} başarıyla eklenmiştir`);
+      toastSuccessNotify(`${path} basariliyla eklenmiştir.`);
     } catch (error) {
       dispatch(fetchFail());
-      toastErrorNotify(`${path} eklenirken bir hata oluştu`);
-      console.log(error);
-    }
-  };
-
-  const deleteBlog = async (path = "blogs", id) => {
-    dispatch(fetchStart());
-    try {
-      await axiosToken.delete(`/${path}/${id}`);
-      toastSuccessNotify(`${path} başarıyla silinmiştir`);
-      getBlog(path);
-    } catch (error) {
-      toastErrorNotify(`${path} silinememiştir`);
-      dispatch(fetchFail());
+      toastErrorNotify(`${path} eklenememiştir.`);
       console.log(error);
     }
   };
@@ -54,26 +94,23 @@ const useBlogCalls = () => {
     try {
       await axiosToken.put(`/${path}/${info._id}`, info);
       getBlog(path);
+      toastSuccessNotify(`${path} basariliyla guncellenmiştir.`);
     } catch (error) {
-      dispatch(fetchFail());
       toastErrorNotify(`${path} guncellenememiştir.`);
+      dispatch(fetchFail());
       console.log(error);
     }
   };
 
-  const getCommentsCount = async (blogId) => {
-    try {
-      const response = await axiosToken.get(
-        `/api/comments/count?blogId=${blogId}`
-      );
-      return response.data.count;
-    } catch (error) {
-      console.log(error);
-      return 0;
-    }
+  return {
+    getBlog,
+    deleteBlog,
+    postBlog,
+    putBlog,
+    getBlogComments,
+    addComment,
+    getUserBlogs,
   };
-
-  return { getBlog, deleteBlog, postBlog, putBlog, getCommentsCount };
 };
 
 export default useBlogCalls;

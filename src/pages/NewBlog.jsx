@@ -1,44 +1,43 @@
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import Modal from "@mui/material/Modal";
-
 import { modalStyle } from "../styles/globalStyles";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+//import { useSelector } from "react-redux";
 import useAuthCalls from "../hooks/useAuthCalls";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import useBlogCalls from "../hooks/useBlogCalls";
 
 export default function NewBlog() {
-  //const { postStock } = useStockRequest();
-  const { categories, status} = useSelector((state) => state.blog);
+  const { categories, status } = useSelector((state) => state.blog);
 
   const initialState = {
     title: "",
     image: "",
     categoryId: "",
-    content: "",
     isPublished: false,
+    content: "",
   };
 
   const [info, setInfo] = useState(initialState);
+  const { postBlog, getBlog } = useBlogCalls();
 
-  const {postBlog} = useAuthCalls()
+  useEffect(() => {
+    getBlog("categories");
+  }, []);
 
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     postBlog("blogs", info);
-
     //handleClose();
   };
-
   return (
     <div>
       <Box sx={modalStyle}>
@@ -57,7 +56,6 @@ export default function NewBlog() {
             onChange={handleChange}
             required
           />
-
           <TextField
             label="image"
             name="image"
@@ -86,26 +84,22 @@ export default function NewBlog() {
               ))}
             </Select>
           </FormControl>
-
           <FormControl fullWidth>
             <InputLabel id="isPublished">Status</InputLabel>
             <Select
               labelId="isPublished"
               id="isPublished"
               name="isPublished"
-              label="Status"
+              label="isPublished"
               value={info.isPublished}
               onChange={handleChange}
               required
             >
-              {status.map((item) => (
-                <MenuItem key={item._id} value={item._id}>
-                  {item.title}
-                </MenuItem>
-              ))}
+             <MenuItem>Please Choose...</MenuItem>
+             <MenuItem value={true}>Published</MenuItem>
+             <MenuItem value={false}>Draft</MenuItem>
             </Select>
           </FormControl>
-
           <TextField
             label="content"
             name="content"
@@ -116,7 +110,6 @@ export default function NewBlog() {
             onChange={handleChange}
             required
           />
-
           <Button variant="contained" type="submit">
             NEW BLOG
           </Button>

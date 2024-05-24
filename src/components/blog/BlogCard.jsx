@@ -1,30 +1,22 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Button, Stack } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import useBlogCalls from "../../hooks/useBlogCalls";
 import { btnStyle } from "../../styles/globalStyles";
-
-export default function BlogCard({ blog, handleOpen }) {
-  const { getCommentsCount } = useBlogCalls();
-  const [commentsCount, setCommentsCount] = useState(0);
-
-  useEffect(() => {
-    if (blog && blog._id) {
-      const fetchCommentsCount = async () => {
-        const count = await getCommentsCount(blog._id);
-        setCommentsCount(count);
-      };
-      fetchCommentsCount();
-    }
-  }, [blog, getCommentsCount]);
-
+import { Button, Stack } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+export default function BlogCard({ blog }) {
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+  const handleReadMore = () => {
+    user ? navigate(`/detail/${blog._id}`) : navigate("/login");
+  };
+  //const { getBlog} = useBlogCalls();
   return (
     <Card
       sx={{
@@ -45,7 +37,7 @@ export default function BlogCard({ blog, handleOpen }) {
         image={blog?.image}
       />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="h6" component="div">
           {blog?.title}
         </Typography>
         <Typography
@@ -62,8 +54,8 @@ export default function BlogCard({ blog, handleOpen }) {
           {blog?.content}
         </Typography>
         <Typography variant="body2" color="text.secondary" mt={2}>
-          Published Date:{" "}
-          {blog ? new Date(blog.createdAt).toLocaleDateString("tr-TR") : ""}
+          Published Date :
+          {new Date(blog?.createdAt).toLocaleDateString("tr-TR")}
         </Typography>
         <Stack
           mt={3}
@@ -73,22 +65,26 @@ export default function BlogCard({ blog, handleOpen }) {
           alignItems="center"
           color="text.secondary"
         >
-          <FavoriteIcon sx={btnStyle} />
+          <FavoriteBorderIcon sx={btnStyle} />
           <Stack direction="row" alignItems="center">
             <ChatBubbleOutlineIcon sx={btnStyle} />
-            <Typography variant="body2" sx={{ ml: 1 }}>
-              {commentsCount}
-            </Typography>
           </Stack>
           <VisibilityIcon sx={btnStyle} />
-          <Button
-            sx={{ border: "1px solid", bgcolor: "#E3D026", color: "white" }}
-            onClick={handleOpen}
-          >
+          <Button sx={{ border: "1px solid" }} onClick={handleReadMore}>
             Read More
           </Button>
         </Stack>
       </CardContent>
+      {/* <CardActions>
+        <DeleteOutlineIcon
+          sx={btnStyle}
+          onClick={() => deleteStock("firms", firm?._id)}
+        />
+        <EditIcon
+          sx={btnStyle}
+          onClick={() => {handleOpen()}}
+        />
+      </CardActions> */}
     </Card>
   );
 }

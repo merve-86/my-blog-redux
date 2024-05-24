@@ -14,11 +14,12 @@ import MenuItem from "@mui/material/MenuItem";
 import logo from "../assets/blog-image.png";
 import useAuthCalls from "../hooks/useAuthCalls";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+
 const pages = [
   {
     title: "DASHBOARD",
-    path: "/blog",
+    path: "/",
   },
   {
     title: "NEW BLOG",
@@ -29,23 +30,47 @@ const pages = [
     path: "/about",
   },
 ];
+
+const settings = [
+  {
+    title: "My Blogs",
+    path: "/myblog",
+  },
+  {
+    title: "Profile",
+    path: "/profile",
+  },
+];
+
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
   const { logout } = useAuthCalls();
   const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout = () => {
+    logout();
+    handleCloseUserMenu();
+    navigate("/");
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -67,6 +92,7 @@ function Navbar() {
           >
             <img src={logo} alt="logo" width="50px" />
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -108,6 +134,7 @@ function Navbar() {
               ))}
             </Menu>
           </Box>
+
           <Typography
             variant="h5"
             noWrap
@@ -138,6 +165,7 @@ function Navbar() {
               </Button>
             ))}
           </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -161,11 +189,25 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {user ? (
-                <Button color="inherit" onClick={logout}>
-                  Logout
-                </Button>
+                <>
+                  {settings.map((item) => (
+                    <MenuItem key={item.title} onClick={handleCloseUserMenu}>
+                      <NavLink
+                        to={item.path}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <Typography textAlign="center">{item.title}</Typography>
+                      </NavLink>
+                    </MenuItem>
+                  ))}
+                  <MenuItem onClick={handleLogout}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>
+                </>
               ) : (
-                <Button color="inherit">Login</Button>
+                <Button color="inherit" component={NavLink} to="/login">
+                  Login
+                </Button>
               )}
             </Menu>
           </Box>
@@ -174,4 +216,5 @@ function Navbar() {
     </AppBar>
   );
 }
+
 export default Navbar;
