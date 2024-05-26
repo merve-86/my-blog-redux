@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
-
 const CommentCard = ({ comment }) => {
   return (
     <Card>
@@ -16,5 +15,4 @@ const CommentCard = ({ comment }) => {
     </Card>
   );
 };
-
 export default CommentCard;

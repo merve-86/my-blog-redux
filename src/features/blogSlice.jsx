@@ -2,40 +2,39 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   blogs: [],
   categories: [],
-  status: [],
   comments: {},
-  loading: false,
-  error: false,
+  isLoading: false,
+  error: null,
 };
 const blogSlice = createSlice({
   name: "blog",
   initialState,
   reducers: {
     fetchStart: (state) => {
-      state.loading = true;
-      state.error = false;
+      state.isLoading = true;
     },
-    getBlogSuccess: (state, { payload: { path, stockData } }) => {
-      state.loading = false;
-      state[path] = stockData;
+    fetchFail: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
     },
-    fetchFail: (state) => {
-      state.loading = false;
-      state.error = true;
+    getBlogSuccess: (state, action) => {
+      state.isLoading = false;
+      state.blogs = action.payload.stockData;
     },
-    getCommentsSuccess: (state, { payload: { blogId, comments } }) => {
-      state.comments[blogId] = comments;
-      state.loading = false;
+    getCommentsSuccess: (state, action) => {
+      state.isLoading = false;
+      state.comments[action.payload.blogId] = action.payload.comments;
     },
-    addCommentSuccess: (state, { payload: { blogId, comment } }) => {
-      state.comments[blogId].push(comment);
+    addCommentSuccess: (state, action) => {
+      state.isLoading = false;
+      state.comments[action.payload.blogId].push(action.payload.comment);
     },
   },
 });
 export const {
   fetchStart,
-  getBlogSuccess,
   fetchFail,
+  getBlogSuccess,
   getCommentsSuccess,
   addCommentSuccess,
 } = blogSlice.actions;

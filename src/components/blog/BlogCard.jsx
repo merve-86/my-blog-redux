@@ -12,26 +12,12 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-
-export default function BlogCard({ blog, handleOpen }) {
+export default function BlogCard({ blog }) {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
   const handleReadMore = () => {
     user ? navigate(`/detail/${blog._id}`) : navigate("/login");
   };
-
-  const handleUpdate = () => {
-    navigate(`/update/${blog._id}`);
-  };
-
-  // const handleUpdate = () => {
-  //   navigate(`/update/${blog._id}`);
-  // };
-
-  const handleDelete = () => {
-    // Delete işlemi için uygun fonksiyonunuzu burada çağırabilirsiniz.
-  };
-  
   return (
     <Card
       sx={{
@@ -89,26 +75,6 @@ export default function BlogCard({ blog, handleOpen }) {
             Read More
           </Button>
         </Stack>
-        {user?._id === blog?.userId && (
-          <Stack
-            mt={2}
-            direction="row"
-            gap={2}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Button variant="contained" color="primary" onClick={handleUpdate}>
-              Update Blog
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleDelete}
-            >
-              Delete Blog
-            </Button>
-          </Stack>
-        )}
       </CardContent>
     </Card>
   );

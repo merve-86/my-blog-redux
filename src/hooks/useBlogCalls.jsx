@@ -33,15 +33,19 @@ const useBlogCalls = () => {
       console.log(error);
     }
   };
-  const addComment = async (blogId, text) => {
+  const addComment = async (blogId, comment) => {
+    dispatch(fetchStart()); // Yorum ekleme işlemi başlatıldığında yüklenme durumu
     try {
-      const { data } = await axiosToken.post(`/comments`, { blogId, text });
-      dispatch(addCommentSuccess({ blogId, comment: data.comment }));
+      const { data } = await axiosToken.post(`/comments/`, { blogId, comment }); // Backend endpoint ve body formatı
+      dispatch(addCommentSuccess({ blogId, comment: data.comment })); // Yorum başarılı bir şekilde eklendiğinde Redux state güncellenir
       toastSuccessNotify("Comment added successfully.");
     } catch (error) {
+      console.error(
+        "Error adding comment:",
+        error.response?.data || error.message
+      ); // Hata mesajlarını daha iyi görüntülemek için console log ekleniyor
       dispatch(fetchFail());
       toastErrorNotify("Failed to add comment.");
-      console.log(error);
     }
   };
   const deleteBlog = async (path = "blogs", id) => {
