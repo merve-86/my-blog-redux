@@ -26,9 +26,9 @@ export const registerSchema = object({
     .matches(/[a-z]/, "Şifre bir küçük harf içermelidir")
     .matches(/[A-Z]/, "Şifre bir büyük harf içermelidir")
     .matches(/[!/[@$!%*?&]+/, "Şifre bir özel karakter içermelidir"),
-    image: string(),
-    city: string(),
-    bio: string(),
+  image: string(),
+  city: string(),
+  bio: string(),
 });
 
 const RegisterForm = ({

@@ -3,14 +3,11 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import LockIcon from "@mui/icons-material/Lock";
-import image from "../assets/result.svg";
+import image from "../assets/blog app.gif";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { Formik } from "formik";
 import LoginForm, { loginSchema } from "../components/auth/LoginForm";
-
-
-//import { login } from "../hooks/useAuthCalls";
 import useAuthCalls from "../hooks/useAuthCalls";
 
 const Login = () => {
@@ -71,7 +68,7 @@ const Login = () => {
 
         <Grid item xs={10} sm={7} md={6}>
           <Container>
-            <img src={image} alt="img"/>
+            <img src={image} alt="img" />
           </Container>
         </Grid>
       </Grid>

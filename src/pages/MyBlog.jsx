@@ -3,32 +3,25 @@ import Grid from "@mui/material/Grid";
 import { useSelector } from "react-redux";
 import { Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import TableSkeleton, {
-  CardSkeleton,
-  ErrorMessage,
-  NoDataMessage,
-} from "../components/DataFetchMessages";
+import { CardSkeleton, ErrorMessage } from "../components/DataFetchMessages";
 import useBlogCalls from "../hooks/useBlogCalls";
 import BlogCard from "../components/blog/BlogCard";
+
 const MyBlog = () => {
   const { getUserBlogs } = useBlogCalls();
   const { blogs, loading, error } = useSelector((state) => state.blog);
-  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
+
   useEffect(() => {
-    console.log("User:", user); // Kullanıcı objesini loglayalım
-    if (user && user._id) {
-      console.log("Fetching user blogs for user ID:", user._id);
-      getUserBlogs();
-    } else {
-      console.error("User is not authenticated or user ID is not available");
-    }
-  }, [user]);
+    getUserBlogs();
+  }, []);
+
   const handleWriteBlog = () => {
     navigate("/newblog");
   };
+
   return (
     <div>
       {loading && (

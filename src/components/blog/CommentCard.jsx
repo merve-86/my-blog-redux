@@ -5,10 +5,10 @@ const CommentCard = ({ comment }) => {
     <Card>
       <CardContent>
         <Typography variant="body1" component="p">
-          {comment.text}
+          {comment.comment}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {comment.username} -{" "}
+          {comment.userId.username} -{" "}
           {new Date(comment.createdAt).toLocaleDateString("tr-TR")}
         </Typography>
       </CardContent>

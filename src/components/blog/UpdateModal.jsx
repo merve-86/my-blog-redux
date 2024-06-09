@@ -11,25 +11,25 @@ import {
 } from "@mui/material";
 import { modalStyle } from "../../styles/globalStyles";
 import useBlogCalls from "../../hooks/useBlogCalls";
+
 const UpdateModal = ({ open, handleClose, blog, categories }) => {
-  const [info, setInfo] = useState(blog || {});
+  const [info, setInfo] = useState(blog);
   const { putBlog } = useBlogCalls();
+
   useEffect(() => {
-    if (blog) {
-      setInfo(blog);
-    }
+    setInfo(blog);
   }, [blog]);
+
   const handleChange = (e) => {
     setInfo({ ...info, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     putBlog("blogs", info);
     handleClose();
   };
-  if (!blog) {
-    return null;
-  }
+
   return (
     <div>
       {open && (

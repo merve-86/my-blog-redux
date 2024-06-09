@@ -5,9 +5,7 @@ function Footer() {
     <Box
       component="footer"
       sx={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
+        mt: 12,
         width: "100%",
         textAlign: "center",
         bgcolor: "background.paper",
@@ -17,7 +15,9 @@ function Footer() {
       <Typography variant="h6" color="primary.main">
         Developed by Merve ÖNCÜ
       </Typography>
-      <Typography color="secondary.main">Copyright {new Date().getFullYear()}</Typography>
+      <Typography color="secondary.main">
+        Copyright {new Date().getFullYear()}
+      </Typography>
     </Box>
   );
 }
