@@ -1,20 +1,18 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import AppRouter from "./router/AppRouter";
-import { grey, blueGrey } from "@mui/material/colors";
 import { Provider } from "react-redux";
 import store, { persistor } from "./app/store";
 import { ToastContainer } from "react-toastify";
 import { PersistGate } from "redux-persist/integration/react";
+import { purple } from '@mui/material/colors';
 
 function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#E3D026",
+        main: "#b39ddb",
       },
-      secondary: {
-        main: "#A29415",
-      },
+      secondary: purple,
     },
   });
   return (
