@@ -1,5 +1,8 @@
 https://blog-app-merve.netlify.app
 
+![my-blog-merve](https://github.com/merve-86/my-blog-redux/assets/154313391/60baaf6d-4adf-45ef-adef-c6feb7fb476d)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
